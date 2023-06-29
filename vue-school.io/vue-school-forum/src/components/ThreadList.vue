@@ -11,7 +11,6 @@
 
 <script>
 import ThreadItem from "@/components/ThreadItem.vue";
-import sourceData from "@/data.json";
 export default {
   components: {
     ThreadItem,
@@ -22,11 +21,13 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      posts: sourceData.posts,
-      users: sourceData.users,
-    };
+  computed: {
+    posts() {
+      return this.$store.state.posts;
+    },
+    users() {
+      return this.$store.state.users;
+    },
   },
   methods: {
     postById(postId) {

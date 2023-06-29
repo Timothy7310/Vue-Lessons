@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import sourceData from "@/data.json";
 export default {
   props: {
     forumIDs: {
@@ -33,12 +32,12 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      forums: this.forumIDs.map((forumId) =>
-        sourceData.forums.find((forum) => forum.id === forumId)
-      ),
-    };
+  computed: {
+    forums() {
+      return this.forumIDs.map((forumId) =>
+        this.$store.state.forums.find((forum) => forum.id === forumId)
+      );
+    },
   },
 };
 </script>
