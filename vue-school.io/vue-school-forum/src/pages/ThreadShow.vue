@@ -37,9 +37,8 @@ export default {
     },
   },
   methods: {
-    addPost(payload) {
-      this.posts.push(payload.post);
-      this.thread.posts.push(payload.postId);
+    addPost(post) {
+      this.$store.dispatch("createPost", post);
     },
   },
 };
