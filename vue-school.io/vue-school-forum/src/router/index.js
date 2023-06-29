@@ -2,6 +2,7 @@ import Home from "@/pages/Home.vue";
 import ThreadShow from "@/pages/ThreadShow.vue";
 import NotFound from "@/pages/NotFound";
 import Forum from "@/pages/Forum";
+import Category from "@/pages/Category";
 import sourceData from "@/data.json";
 
 import {
@@ -20,6 +21,12 @@ const routes = [
     path: "/forum/:id",
     name: "Forum",
     component: Forum,
+    props: true,
+  },
+  {
+    path: "/category/:id",
+    name: "Category",
+    component: Category,
     props: true,
   },
   {

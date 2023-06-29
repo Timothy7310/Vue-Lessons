@@ -1,9 +1,13 @@
 <template>
-  <div class="forum-list" v-for="category in categories" :key="category.id">
-    <h2 class="list-title">
-      <a href="#">{{ category.name }}</a>
-    </h2>
-    <forum-list :forumIDs="category.forums" />
+  <div class="col-full">
+    <div class="forum-list" v-for="category in categories" :key="category.id">
+      <h2 class="list-title">
+        <router-link :to="{ name: 'Category', params: { id: category.id } }">{{
+          category.name
+        }}</router-link>
+      </h2>
+      <forum-list :forumIDs="category.forums" />
+    </div>
   </div>
 </template>
 
