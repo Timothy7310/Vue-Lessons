@@ -1,6 +1,8 @@
 <template>
   <h1>Welcome to the Forum</h1>
-  <thread-list :threads="threads"></thread-list>
+  <div class="col-full">
+    <thread-list :threads="threads" />
+  </div>
 </template>
 
 <script>
