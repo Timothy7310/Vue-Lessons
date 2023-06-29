@@ -3,6 +3,7 @@ import ThreadShow from "@/pages/ThreadShow.vue";
 import NotFound from "@/pages/NotFound";
 import Forum from "@/pages/Forum";
 import Category from "@/pages/Category";
+import Profile from "@/pages/Profile";
 import sourceData from "@/data.json";
 
 import {
@@ -16,6 +17,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   },
   {
     path: "/forum/:id",
