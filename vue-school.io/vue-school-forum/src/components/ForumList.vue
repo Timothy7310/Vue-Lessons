@@ -25,19 +25,10 @@
 </template>
 
 <script>
-import { findById } from "@/helpers";
 export default {
-  props: {
-    forumIDs: {
-      type: Array,
-      required: true,
-    },
-  },
   computed: {
     forums() {
-      return this.forumIDs.map((forumId) =>
-        findById(this.$store.state.forums, forumId)
-      );
+      return this.$store.state.forums;
     },
   },
 };

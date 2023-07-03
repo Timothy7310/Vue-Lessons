@@ -6,7 +6,7 @@
           category.name
         }}</router-link>
       </h2>
-      <forum-list :forumIDs="category.forums" />
+      <forum-list />
     </div>
   </div>
 </template>

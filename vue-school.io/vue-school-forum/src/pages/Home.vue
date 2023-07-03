@@ -1,6 +1,6 @@
 <template>
   <h1 class="push-top">Welcome to the Forum</h1>
-  <div class="col-full">
+  <div v-if="categories" class="col-full">
     <category-list :categories="categories" />
   </div>
 </template>
@@ -15,6 +15,11 @@ export default {
     categories() {
       return this.$store.state.categories;
     },
+  },
+  async beforeCreate() {
+    const categories = await this.$store.dispatch("fetchAllCategories");
+    const forumIds = categories.map((category) => category.forums).flat();
+    this.$store.dispatch("fetchForums", { ids: forumIds });
   },
 };
 </script>
