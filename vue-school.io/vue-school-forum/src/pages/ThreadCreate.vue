@@ -9,6 +9,7 @@
 
 <script>
 import ThreadEdit from "@/components/ThreadEdit";
+import { findById } from "@/helpers";
 export default {
   components: {
     ThreadEdit,
@@ -21,9 +22,7 @@ export default {
   },
   computed: {
     forum() {
-      return this.$store.state.forums.find(
-        (forum) => forum.id === this.forumId
-      );
+      return findById(this.$store.state.forums, this.forumId);
     },
   },
   methods: {
