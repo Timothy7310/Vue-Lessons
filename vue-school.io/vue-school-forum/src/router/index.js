@@ -1,5 +1,6 @@
-import Home from "@/pages/Home.vue";
-import ThreadShow from "@/pages/ThreadShow.vue";
+import Home from "@/pages/Home";
+import ThreadShow from "@/pages/ThreadShow";
+import ThreadCreate from "@/pages/ThreadCreate";
 import NotFound from "@/pages/NotFound";
 import Forum from "@/pages/Forum";
 import Category from "@/pages/Category";
@@ -47,7 +48,7 @@ const routes = [
     name: "ThreadShow",
     component: ThreadShow,
     props: true,
-    beforeEnter: (to, from, next) => {
+    beforeEnter: (to, _from, next) => {
       const threadExists = !!sourceData.threads.find(
         (thread) => thread.id === to.params.id
       );
@@ -63,6 +64,12 @@ const routes = [
         });
       }
     },
+  },
+  {
+    path: "/forum/:forumId/thread/create",
+    name: "ThreadCreate",
+    component: ThreadCreate,
+    props: true,
   },
   {
     path: "/:pathMatch(.*)*",
