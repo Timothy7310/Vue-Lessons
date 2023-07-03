@@ -4,7 +4,7 @@
       Create new thread in <i>{{ forum.name }}</i>
     </h1>
 
-    <form @submit.prevent="save">
+    <!-- <form @submit.prevent="save">
       <div class="form-group">
         <label for="thread_title">Title:</label>
         <input
@@ -38,12 +38,17 @@
           Publish
         </button>
       </div>
-    </form>
+    </form> -->
+    <thread-edit @save="save" :forumId="this.forum.id" />
   </div>
 </template>
 
 <script>
+import ThreadEdit from "@/components/ThreadEdit";
 export default {
+  components: {
+    ThreadEdit,
+  },
   props: {
     forumId: {
       type: String,
@@ -57,18 +62,12 @@ export default {
       );
     },
   },
-  data() {
-    return {
-      title: "",
-      text: "",
-    };
-  },
   methods: {
-    async save() {
+    async save({ title, text }) {
       const thread = await this.$store.dispatch("createThread", {
         forumId: this.forum.id,
-        title: this.title,
-        text: this.text,
+        title,
+        text,
       });
       this.$router.push({ name: "ThreadShow", params: { id: thread.id } });
     },
