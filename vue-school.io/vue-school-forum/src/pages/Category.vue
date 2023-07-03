@@ -25,8 +25,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("categories", ["fetchCategory"]),
-    ...mapActions("forums", ["fetchForums"]),
+    ...mapActions(["fetchCategory", "fetchForums"]),
     getForumsForCategory(category) {
       return this.$store.state.forums.filter(
         (forum) => forum.categoryId === category.id
@@ -34,11 +33,8 @@ export default {
     },
   },
   async created() {
-    const category = await this.$store.dispatch("fetchCategory", {
-      id: this.id,
-    });
-    await this.$store.dispatch("fetchForums", { ids: category.forums });
-    // await this.fetchForums({ ids: category.forums });
+    const category = await this.fetchCategory({ id: this.id });
+    await this.fetchForums({ ids: category.forums });
   },
 };
 </script>
