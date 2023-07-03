@@ -1,15 +1,17 @@
 <template>
   <div class="col-full push-top">
-    <h1>{{ categories[0].name }}</h1>
+    <h1>{{ category.name }}</h1>
   </div>
-  <category-list :categories="categories" />
+  <forum-list :title="category.name" :forums="getForumsForCategory(category)" />
 </template>
 
 <script>
-import CategoryList from "@/components/CategoryList.vue";
+import ForumList from "@/components/ForumList";
+import { findById } from "@/helpers";
+import { mapActions } from "vuex";
 export default {
   components: {
-    CategoryList,
+    ForumList,
   },
   props: {
     id: {
@@ -18,11 +20,25 @@ export default {
     },
   },
   computed: {
-    categories() {
-      return this.$store.state.categories.filter(
-        (category) => category.id === this.id
+    category() {
+      return findById(this.$store.state.categories, this.id) || {};
+    },
+  },
+  methods: {
+    ...mapActions("categories", ["fetchCategory"]),
+    ...mapActions("forums", ["fetchForums"]),
+    getForumsForCategory(category) {
+      return this.$store.state.forums.filter(
+        (forum) => forum.categoryId === category.id
       );
     },
+  },
+  async created() {
+    const category = await this.$store.dispatch("fetchCategory", {
+      id: this.id,
+    });
+    await this.$store.dispatch("fetchForums", { ids: category.forums });
+    // await this.fetchForums({ ids: category.forums });
   },
 };
 </script>

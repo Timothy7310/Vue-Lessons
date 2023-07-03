@@ -52,7 +52,7 @@ export default {
     },
 
     userById(userId) {
-      return findById(this.users, userId);
+      return findById(this.users, userId) || {};
     },
   },
 };
