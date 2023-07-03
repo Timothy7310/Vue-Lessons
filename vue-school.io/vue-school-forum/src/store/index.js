@@ -8,30 +8,36 @@ export default createStore({
     authId: "L664y3qZSubDbT1R6npC0EEybJ73",
   },
   getters: {
-    authUser: (state) => {
-      const user = findById(state.users, state.authId);
+    authUser: (state, getters) => {
+      return getters.user(state.authId);
+    },
 
-      if (!user) {
-        return null;
-      }
+    user: (state) => {
+      return (id) => {
+        const user = findById(state.users, id);
 
-      return {
-        ...user,
-        get posts() {
-          return state.posts.filter((post) => post.userId === user.id);
-        },
+        if (!user) {
+          return null;
+        }
 
-        get postsCount() {
-          return this.posts.length;
-        },
+        return {
+          ...user,
+          get posts() {
+            return state.posts.filter((post) => post.userId === user.id);
+          },
 
-        get threads() {
-          return state.threads.filter((thread) => thread.userId === user.id);
-        },
+          get postsCount() {
+            return this.posts.length;
+          },
 
-        get threadsCount() {
-          return this.threads.length;
-        },
+          get threads() {
+            return state.threads.filter((thread) => thread.userId === user.id);
+          },
+
+          get threadsCount() {
+            return this.threads.length;
+          },
+        };
       };
     },
 
