@@ -4,7 +4,7 @@ import { findById } from "@/helpers";
 export default {
   async createPost({ commit, state }, post) {
     post.userId = state.authId;
-    post.publishedAt = Math.floor(Date.now() / 1000);
+    post.publishedAt = firebase.firestore.FieldValue.serverTimestamp();
 
     const batch = firebase.firestore().batch();
     const postRef = firebase.firestore().collection("posts").doc();
@@ -18,10 +18,14 @@ export default {
       contributors: firebase.firestore.FieldValue.arrayUnion(state.authId),
     });
     await batch.commit();
+    const newPost = await postRef.get();
 
-    commit("setItem", { resource: "posts", item: { ...post, id: postRef.id } });
+    commit("setItem", {
+      resource: "posts",
+      item: { ...newPost.data(), id: newPost.id },
+    });
     commit("appendPostToThread", {
-      childId: postRef.id,
+      childId: newPost.id,
       parentId: post.threadId,
     });
     commit("appendContributorToThread", {
