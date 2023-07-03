@@ -3,7 +3,7 @@
     <div class="form-group">
       <label for="thread_title">Title:</label>
       <input
-        v-model="title"
+        v-model="forum.title"
         type="text"
         id="thread_title"
         class="form-input"
@@ -14,7 +14,7 @@
     <div class="form-group">
       <label for="thread_content">Content:</label>
       <textarea
-        v-model="text"
+        v-model="forum.text"
         id="thread_content"
         class="form-input"
         name="content"
@@ -25,11 +25,17 @@
 
     <div class="btn-group">
       <router-link
-        :to="{ name: 'Forum', params: { id: forumId } }"
+        :to="{ name: isEdit ? 'ThreadShow' : 'Forum', params: { id } }"
         class="btn btn-ghost"
         >Cancel</router-link
       >
-      <button class="btn btn-blue" type="submit" name="Publish">Publish</button>
+      <button
+        class="btn btn-blue"
+        type="submit"
+        :name="isEdit ? 'Update' : 'Publish'"
+      >
+        {{ isEdit ? "Update" : "Publish" }}
+      </button>
     </div>
   </form>
 </template>
@@ -37,20 +43,34 @@
 <script>
 export default {
   props: {
-    forumId: {
+    id: {
       type: String,
+      required: true,
+    },
+    text: {
+      type: String,
+      default: "",
+    },
+    title: {
+      type: String,
+      default: "",
+    },
+    isEdit: {
+      type: Boolean,
       required: true,
     },
   },
   data() {
     return {
-      title: "",
-      text: "",
+      forum: {
+        title: this.title,
+        text: this.text,
+      },
     };
   },
   methods: {
     save() {
-      this.$emit("save", { title: this.title, text: this.text });
+      this.$emit("save", { ...this.forum });
     },
   },
 };
