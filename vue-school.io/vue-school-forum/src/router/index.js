@@ -6,7 +6,7 @@ import NotFound from "@/pages/NotFound";
 import Forum from "@/pages/Forum";
 import Category from "@/pages/Category";
 import Profile from "@/pages/Profile";
-import sourceData from "@/data.json";
+import store from "@/store";
 
 import {
   createRouter,
@@ -101,6 +101,10 @@ const router = createRouter({
 
     return scroll;
   },
+});
+
+router.beforeEach(() => {
+  store.dispatch("unsubscribeAllSnapshots");
 });
 
 export default router;

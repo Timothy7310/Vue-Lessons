@@ -165,7 +165,7 @@ export default {
   fetchItem({ state, commit }, { resource, id, emoji }) {
     console.log("🔥", emoji, id);
     return new Promise((resolve) => {
-      firebase
+      const unsubscribe = firebase
         .firestore()
         .collection(resource)
         .doc(id)
@@ -174,6 +174,7 @@ export default {
           commit("setItem", { resource, id, item });
           resolve(item);
         });
+      commit("appendUnsubscribe", { unsubscribe });
     });
   },
 
@@ -181,4 +182,9 @@ export default {
     Promise.all(
       ids.map((id) => dispatch("fetchItem", { id, resource, emoji }))
     ),
+
+  async unsubscribeAllSnapshots({ state, commit }) {
+    state.unsubscribes.forEach((unsubscribe) => unsubscribe());
+    commit("clearAllUnsubscribes");
+  },
 };
