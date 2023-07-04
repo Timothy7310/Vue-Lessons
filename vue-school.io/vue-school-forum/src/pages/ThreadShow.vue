@@ -23,7 +23,7 @@
     </p>
 
     <post-list :posts="threadPosts" />
-    <post-editor @save="addPost" :threadId="this.id" />
+    <post-editor @save="addPost" />
   </div>
 </template>
 
@@ -60,8 +60,16 @@ export default {
   },
   methods: {
     ...mapActions(["createPost", "fetchThread", "fetchPosts", "fetchUsers"]),
-    addPost(post) {
-      this.$store.dispatch("createPost", post);
+    handleAddPost(event) {
+      console.log({ ...event.post });
+      this.createPost({ ...event.post });
+    },
+    addPost(eventData) {
+      const post = {
+        ...eventData.post,
+        threadId: this.id,
+      };
+      this.createPost(post);
     },
   },
 

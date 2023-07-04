@@ -3,7 +3,7 @@
     <form @submit.prevent="save">
       <div class="form-group">
         <textarea
-          v-model="text"
+          v-model="postCopy.text"
           name=""
           id=""
           cols="30"
@@ -12,7 +12,9 @@
         ></textarea>
       </div>
       <div class="form-actions">
-        <button class="btn-blue" type="submit">Submit post</button>
+        <button class="btn-blue" type="submit">
+          {{ post.id ? "Update Post" : "Submit post" }}
+        </button>
       </div>
     </form>
   </div>
@@ -23,22 +25,27 @@ export default {
   props: {
     threadId: {
       type: String,
-      required: true,
+    },
+    post: {
+      type: Object,
+      default: () => ({ text: null }),
     },
   },
   data() {
     return {
-      text: "",
+      postCopy: { ...this.post },
     };
   },
   methods: {
     save() {
-      const post = {
-        text: this.text,
-        threadId: this.threadId,
-      };
-      this.$emit("save", post);
-      this.text = "";
+      // const post = {
+      //   text: this.text,
+      //   threadId: this.threadId,
+      // };
+      // this.$emit("save", post: this.postCopy);
+      // this.text = "";
+      this.$emit("save", { post: this.postCopy });
+      this.postCopy.text = "";
     },
   },
 };
