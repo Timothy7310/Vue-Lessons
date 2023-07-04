@@ -20,7 +20,7 @@ export default {
         },
 
         get postsCount() {
-          return this.posts.length;
+          return user.postsCount || 0;
         },
 
         get threads() {
@@ -28,7 +28,7 @@ export default {
         },
 
         get threadsCount() {
-          return this.threads.length;
+          return user.threads?.length || 0;
         },
       };
     };
