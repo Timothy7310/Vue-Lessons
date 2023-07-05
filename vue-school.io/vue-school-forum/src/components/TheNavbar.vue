@@ -43,6 +43,15 @@
             </ul>
           </div>
         </li>
+        <li v-if="authUser" class="navbar-item">
+          <a @click.prevent="signOut">Sign Out</a>
+        </li>
+        <li v-if="!authUser" class="navbar-item">
+          <router-link :to="{ name: 'SignIn' }">Sign In</router-link>
+        </li>
+        <li v-if="!authUser" class="navbar-item">
+          <router-link :to="{ name: 'Register' }">Register</router-link>
+        </li>
       </ul>
 
       <!-- <ul>
@@ -75,6 +84,11 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters(["authUser"]),
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch("signOut");
+    },
   },
 };
 </script>

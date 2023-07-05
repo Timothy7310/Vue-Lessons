@@ -50,7 +50,6 @@ export default {
     const postRef = firebase.firestore().collection("posts").doc(id);
     await postRef.update(post);
     const updatedPost = await postRef.get();
-    console.log(updatedPost);
     commit("setItem", { resource: "posts", item: updatedPost });
   },
 
@@ -112,12 +111,37 @@ export default {
     return docToResource(newThread);
   },
 
-  async createUser({ commit }, { email, name, username, avatar = null }) {
+  async registerUserWithEmailAndPassword(
+    { dispatch },
+    { email, name, username, password, avatar = null }
+  ) {
+    const result = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    await dispatch("createUser", {
+      id: result.user.uid,
+      email,
+      name,
+      username,
+      avatar,
+    });
+  },
+
+  signInWithEmailAndPassword(context, { email, password }) {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  },
+
+  async signOut({ commit }) {
+    await firebase.auth().signOut();
+    commit("setAuthId", null);
+  },
+
+  async createUser({ commit }, { id, email, name, username, avatar = null }) {
     const registeredAt = firebase.firestore.FieldValue.serverTimestamp();
     const usernameLower = username.toLowerCase();
     email = email.toLowerCase();
     const user = { avatar, email, name, username, usernameLower, registeredAt };
-    const userRef = await firebase.firestore().collection("users").doc();
+    const userRef = await firebase.firestore().collection("users").doc(id);
     userRef.set(user);
     const newUser = await userRef.get();
     commit("setItem", { resource: "users", item: newUser });
@@ -143,8 +167,12 @@ export default {
   fetchUser: ({ dispatch }, { id }) =>
     dispatch("fetchItem", { resource: "users", id, emoji: "🧑🏻" }),
 
-  fetchAuthUser: ({ dispatch, state }) =>
-    dispatch("fetchItem", { resource: "users", id: state.authId, emoji: "🧑🏻" }),
+  fetchAuthUser: ({ dispatch, state, commit }) => {
+    const userId = firebase.auth().currentUser?.uid;
+    if (!userId) return;
+    dispatch("fetchItem", { resource: "users", id: userId, emoji: "🧑🏻" });
+    commit("setAuthId", userId);
+  },
 
   fetchAllCategories({ commit }) {
     console.log("🔥", "🗂️", "all");
