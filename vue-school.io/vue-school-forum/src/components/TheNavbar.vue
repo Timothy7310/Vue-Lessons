@@ -15,7 +15,7 @@
     <nav class="navbar">
       <ul>
         <li v-if="authUser" class="navbar-user">
-          <router-link :to="{ name: 'Profile' }">
+          <a @click.prevent="isDropdownOpen = !isDropdownOpen">
             <img
               class="avatar-small"
               :src="authUser.avatar"
@@ -24,27 +24,29 @@
             <span>
               {{ authUser.name }}
               <img
+                :class="{ active: isDropdownOpen }"
                 class="icon-profile"
                 src="../assets/svg/arrow-profile.svg"
                 alt=""
               />
             </span>
-          </router-link>
+          </a>
 
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
-          <div id="user-dropdown">
+          <div id="user-dropdown" :class="{ 'active-drop': isDropdownOpen }">
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item">
-                <a href="profile.html">View profile</a>
+                <router-link :to="{ name: 'Profile' }"
+                  >View profile</router-link
+                >
               </li>
-              <li class="dropdown-menu-item"><a href="#">Log out</a></li>
+              <li class="dropdown-menu-item">
+                <a @click.prevent="signOut">Sign Out</a>
+              </li>
             </ul>
           </div>
-        </li>
-        <li v-if="authUser" class="navbar-item">
-          <a @click.prevent="signOut">Sign Out</a>
         </li>
         <li v-if="!authUser" class="navbar-item">
           <router-link :to="{ name: 'SignIn' }">Sign In</router-link>
@@ -82,6 +84,11 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
+  },
   computed: {
     ...mapGetters(["authUser"]),
   },

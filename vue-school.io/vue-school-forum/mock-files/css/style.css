@@ -1031,10 +1031,21 @@ ul .navbar-item:last-child, ul .navbar-mobile-item:last-child {
     color: white;
 }
 
-.navbar-user a:hover .icon-profile {
+/* .navbar-user a:hover .icon-profile {
     transition: all .4s ease;
     transform: rotate(-180deg);
+} */
+
+.navbar-user .icon-profile{
+    transition: 0.4s rotate ease;
+    
 }
+
+.navbar-user .icon-profile.active {
+    transition: all 0.4s ease;
+    transform: rotate(-180deg);
+  }
+  
 
 .navbar-user img {
     margin-right: 10px;
