@@ -1,5 +1,6 @@
 <template>
-  <div class="flex-grid">
+  <h1>My Profile</h1>
+  <!-- <div class="flex-grid">
     <div class="col-3 push-top">
       <user-profile-card v-if="!isEdit" :user="user" />
       <user-profile-card-editor v-else :user="user" />
@@ -15,20 +16,22 @@
 
       <post-list :posts="user.posts" />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import PostList from "@/components/PostList.vue";
-import UserProfileCard from "@/components/UserProfileCard.vue";
-import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
+// import PostList from "@/components/PostList.vue";
+// import UserProfileCard from "@/components/UserProfileCard.vue";
+// import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
 import { mapGetters } from "vuex";
+import store from "@/store";
+
 export default {
-  components: {
-    PostList,
-    UserProfileCard,
-    UserProfileCardEditor,
-  },
+  // components: {
+  //   PostList,
+  //   UserProfileCard,
+  //   UserProfileCardEditor,
+  // },
   props: {
     isEdit: {
       type: Boolean,
@@ -38,6 +41,14 @@ export default {
   computed: {
     ...mapGetters({ user: "authUser" }),
   },
+  beforeRouteEnter(to, from) {
+    if (!store.state.authId) {
+      console.log(store.state.authId);
+      return { name: "Home" };
+    }
+  },
+  beforeRouteUpdate() {},
+  beforeRouteLeave() {},
 };
 </script>
 

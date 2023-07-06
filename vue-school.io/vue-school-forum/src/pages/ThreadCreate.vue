@@ -3,7 +3,13 @@
     <h1>
       Create new thread in <i>{{ forum.name }}</i>
     </h1>
-    <thread-edit @save="save" :id="this.forum.id" :isEdit="false" />
+    <thread-edit
+      @save="save"
+      @dirty="isDirty = true"
+      @clean="isDirty = false"
+      :id="this.forum.id"
+      :isEdit="false"
+    />
   </div>
 </template>
 
@@ -22,6 +28,11 @@ export default {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      isDirty: false,
+    };
   },
   mixins: [asyncDataStatus],
   computed: {
@@ -47,6 +58,16 @@ export default {
   async created() {
     await this.fetchForum({ id: this.forumId });
     this.asyncDataStatus_fetched();
+  },
+
+  beforeRouteLeave() {
+    console.log(this.isDirty);
+    if (this.isDirty) {
+      const confirmed = window.confirm(
+        "Are you sure you want to leave? Unsaved changes will be lost!"
+      );
+      if (!confirmed) return false;
+    }
   },
 };
 </script>
