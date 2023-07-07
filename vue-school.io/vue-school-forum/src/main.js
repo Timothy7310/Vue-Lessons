@@ -6,6 +6,7 @@ import firebase from "@/helpers/firebase";
 import firebaseConfig from "@/config/firebase";
 import FontAwesome from "@/plugins/FontAwesome";
 import ClickOutsideDirective from "@/plugins/ClickOutsideDirective";
+import PageScrollDirective from "@/plugins/PageScrollDirective";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -29,4 +30,5 @@ app.use(router);
 app.use(store);
 app.use(FontAwesome);
 app.use(ClickOutsideDirective);
+app.use(PageScrollDirective);
 app.mount("#app");

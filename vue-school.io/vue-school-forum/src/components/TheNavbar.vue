@@ -1,10 +1,19 @@
 <template lang="">
-  <header class="header" id="header">
+  <header
+    class="header"
+    id="header"
+    v-click-outside="() => (isMobileNavMenuOpen = false)"
+    v-page-scroll="() => (isMobileNavMenuOpen = false)"
+  >
     <router-link :to="{ name: 'Home' }" class="logo">
       <img src="../assets/svg/vueschool-logo.svg" />
     </router-link>
 
-    <div class="btn-hamburger">
+    <div
+      class="btn-hamburger"
+      :class="{ 'btn-humburger-active': isMobileNavMenuOpen }"
+      @click="isMobileNavMenuOpen = !isMobileNavMenuOpen"
+    >
       <!-- use .btn-humburger-active to open the menu -->
       <div class="top bar"></div>
       <div class="middle bar"></div>
@@ -12,7 +21,7 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-    <nav class="navbar">
+    <nav class="navbar" :class="{ 'navbar-open': isMobileNavMenuOpen }">
       <ul>
         <li v-if="authUser" class="navbar-user">
           <a
@@ -57,6 +66,12 @@
         <li v-if="!authUser" class="navbar-item">
           <router-link :to="{ name: 'Register' }">Register</router-link>
         </li>
+        <li v-if="authUser" class="navbar-mobile-item">
+          <router-link :to="{ name: 'Profile' }">View profile</router-link>
+        </li>
+        <li v-if="authUser" class="navbar-mobile-item">
+          <a @click.prevent="signOut">Sign Out</a>
+        </li>
       </ul>
 
       <!-- <ul>
@@ -90,6 +105,7 @@ export default {
   data() {
     return {
       isDropdownOpen: false,
+      isMobileNavMenuOpen: false,
     };
   },
   computed: {
@@ -98,7 +114,13 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch("auth/signOut");
+      this.$router.push({ name: "Home" });
     },
+  },
+  created() {
+    this.$router.beforeEach((to, from) => {
+      this.isMobileNavMenuOpen = false;
+    });
   },
 };
 </script>
