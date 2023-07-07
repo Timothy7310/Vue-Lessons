@@ -39,7 +39,7 @@ service cloud.firestore {
     }
     
     // posts
-    match /threads/{thread}{
+    match /posts/{post}{
         allow write: if
           userIsLoggedIn() && (isNewResource() || resourceBelongsToUser())
     }
