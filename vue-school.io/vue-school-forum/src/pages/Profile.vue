@@ -1,20 +1,22 @@
 <template>
-  <h1>My Profile</h1>
-  <div class="flex-grid">
-    <div class="col-3 push-top">
-      <user-profile-card v-if="!isEdit" :user="user" />
-      <user-profile-card-editor v-else :user="user" />
-    </div>
-
-    <div class="col-7 push-top">
-      <div class="profile-header">
-        <span class="text-lead"> {{ user.username }} recent activity </span>
-        <a href="#">See only started threads?</a>
+  <div>
+    <h1 style="text-align: center">My Profile</h1>
+    <div class="flex-grid">
+      <div class="col-3 push-top">
+        <user-profile-card v-if="!isEdit" :user="user" />
+        <user-profile-card-editor v-else :user="user" />
       </div>
 
-      <hr />
+      <div class="col-7 push-top">
+        <div class="profile-header">
+          <span class="text-lead"> {{ user.username }} recent activity </span>
+          <a href="#">See only started threads?</a>
+        </div>
 
-      <post-list :posts="user.posts" />
+        <hr />
+
+        <post-list :posts="user.posts" />
+      </div>
     </div>
   </div>
 </template>

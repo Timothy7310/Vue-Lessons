@@ -75,7 +75,7 @@
       </div>
 
       <div class="btn-group space-between">
-        <button class="btn-ghost" @click="cancel">Cancel</button>
+        <button class="btn-ghost" type="button" @click="cancel">Cancel</button>
         <button type="submit" class="btn-blue">Save</button>
       </div>
     </form>
@@ -97,7 +97,7 @@ export default {
   },
 
   methods: {
-    save() {
+    async save() {
       this.$store.dispatch("updateUser", { ...this.activeUser });
       this.$router.push({ name: "Profile" });
     },

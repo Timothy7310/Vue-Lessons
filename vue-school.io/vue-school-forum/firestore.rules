@@ -58,7 +58,7 @@ service cloud.firestore {
     	allow create: if
       	true
       allow update: if
-      	request.auth.uid == request.id
+      	request.auth.uid == resource.id
     }
   }
 }
