@@ -24,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.5",
     "@babel/eslint-parser": "^7.12.16",
+    "@hennge/vue3-pagination": "^1.0.17",
     "@types/nprogress": "^0.2.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",

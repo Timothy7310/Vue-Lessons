@@ -4,6 +4,7 @@ import {
   makeAppendChildToParentMutation,
 } from "@/helpers";
 import firebase from "firebase";
+import { chunk } from "lodash";
 
 export default {
   namespaced: true,
@@ -24,7 +25,7 @@ export default {
             return thread.posts.length - 1;
           },
           get contributorsCount() {
-            return thread.contributors.length;
+            return thread.contributors?.length;
           },
         };
       };
@@ -127,6 +128,13 @@ export default {
         { resource: "threads", ids, emoji: "📃" },
         { root: true }
       ),
+
+    fetchThreadsByPage: ({ dispatch, commit }, { ids, page, perPage = 1 }) => {
+      commit("clearThreads");
+      const chunks = chunk(ids, perPage);
+      const limitedIds = chunks[page - 1];
+      return dispatch("fetchThreads", { ids: limitedIds });
+    },
   },
   mutations: {
     appendContributorToThread: makeAppendChildToParentMutation({
@@ -137,5 +145,8 @@ export default {
       parent: "threads",
       child: "posts",
     }),
+    clearThreads(state) {
+      state.items = [];
+    },
   },
 };
