@@ -15,7 +15,10 @@
     <nav class="navbar">
       <ul>
         <li v-if="authUser" class="navbar-user">
-          <a @click.prevent="isDropdownOpen = !isDropdownOpen">
+          <a
+            @click.prevent="isDropdownOpen = !isDropdownOpen"
+            v-click-outside="() => (isDropdownOpen = false)"
+          >
             <img
               class="avatar-small"
               :src="authUser.avatar"

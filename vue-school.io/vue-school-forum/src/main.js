@@ -5,6 +5,7 @@ import store from "@/store";
 import firebase from "@/helpers/firebase";
 import firebaseConfig from "@/config/firebase";
 import FontAwesome from "@/plugins/FontAwesome";
+import ClickOutsideDirective from "@/plugins/ClickOutsideDirective";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -27,4 +28,5 @@ requireComponent.keys().forEach(function (fileName) {
 app.use(router);
 app.use(store);
 app.use(FontAwesome);
+app.use(ClickOutsideDirective);
 app.mount("#app");
