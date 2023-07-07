@@ -1,6 +1,6 @@
 <template>
   <h1>My Profile</h1>
-  <!-- <div class="flex-grid">
+  <div class="flex-grid">
     <div class="col-3 push-top">
       <user-profile-card v-if="!isEdit" :user="user" />
       <user-profile-card-editor v-else :user="user" />
@@ -16,21 +16,23 @@
 
       <post-list :posts="user.posts" />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
-// import PostList from "@/components/PostList.vue";
-// import UserProfileCard from "@/components/UserProfileCard.vue";
-// import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
+import PostList from "@/components/PostList.vue";
+import UserProfileCard from "@/components/UserProfileCard.vue";
+import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
 import { mapGetters } from "vuex";
+import asyncDataStatus from "@/mixins/asyncDataStatus";
 
 export default {
-  // components: {
-  //   PostList,
-  //   UserProfileCard,
-  //   UserProfileCardEditor,
-  // },
+  components: {
+    PostList,
+    UserProfileCard,
+    UserProfileCardEditor,
+  },
+  mixins: [asyncDataStatus],
   props: {
     isEdit: {
       type: Boolean,
@@ -39,6 +41,10 @@ export default {
   },
   computed: {
     ...mapGetters({ user: "authUser" }),
+  },
+  async created() {
+    await this.$store.dispatch("fetchAuthUsersPosts");
+    this.asyncDataStatus_fetched();
   },
 };
 </script>
