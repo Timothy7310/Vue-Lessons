@@ -1,27 +1,23 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="signIn" class="card card-form">
+      <vee-form @submit="signIn" class="card card-form">
         <h1 class="text-center">Login</h1>
+        <app-form-field
+          v-model="form.email"
+          name="email"
+          label="Email"
+          rules="required|email"
+          type="email"
+        />
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            v-model="form.email"
-            id="email"
-            type="text"
-            class="form-input"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            v-model="form.password"
-            id="password"
-            type="password"
-            class="form-input"
-          />
-        </div>
+        <app-form-field
+          v-model="form.password"
+          name="password"
+          label="Password"
+          rules="required"
+          type="password"
+        />
 
         <div class="push-top">
           <button type="submit" class="btn-blue btn-block">Log in</button>
@@ -32,7 +28,7 @@
             >Create an account?</router-link
           >
         </div>
-      </form>
+      </vee-form>
 
       <div class="push-top text-center">
         <button @click.prevent="signInWithGoogle" class="btn-red btn-xsmall">

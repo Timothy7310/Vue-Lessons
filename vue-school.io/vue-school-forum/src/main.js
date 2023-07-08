@@ -8,6 +8,7 @@ import FontAwesome from "@/plugins/FontAwesome";
 import ClickOutsideDirective from "@/plugins/ClickOutsideDirective";
 import PageScrollDirective from "@/plugins/PageScrollDirective";
 import VPagination from "@/plugins/Vue3Pagination";
+import VeeValidatePlugin from "@/plugins/VeeValidatePlugin";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -33,4 +34,5 @@ app.use(FontAwesome);
 app.use(ClickOutsideDirective);
 app.use(PageScrollDirective);
 app.use(VPagination);
+app.use(VeeValidatePlugin);
 app.mount("#app");

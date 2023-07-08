@@ -1,69 +1,44 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <vee-form
-        @submit="register"
-        class="card card-form"
-        :validation-schema="{
-          name: (value) => {
-            if (value && value.trim()) {
-              return true;
-            }
-            return 'This is required';
-          },
-          username: (value) => {
-            if (value && value.trim()) {
-              return true;
-            }
-            return 'This is required';
-          },
-        }"
-      >
+      <vee-form @submit="register" class="card card-form">
         <h1 class="text-center">Register</h1>
 
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <vee-field
-            name="name"
-            v-model="form.name"
-            id="name"
-            type="text"
-            class="form-input"
-          />
-        </div>
+        <app-form-field
+          v-model="form.name"
+          name="name"
+          label="Name"
+          rules="required"
+          type="text"
+        />
 
-        <div class="form-group">
-          <label for="username">Username</label>
-          <vee-field
-            name="username"
-            v-model="form.username"
-            id="username"
-            type="text"
-            class="form-input"
-          />
-        </div>
+        <app-form-field
+          v-model="form.username"
+          name="username"
+          label="Username"
+          rules="required|unique:users,username"
+          type="text"
+        />
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <vee-field
-            name="email"
-            v-model="form.email"
-            id="email"
-            type="email"
-            class="form-input"
-          />
-        </div>
+        <app-form-field
+          v-model="form.email"
+          name="email"
+          label="Email"
+          :rules="{
+            required: true,
+            email: true,
+            unique: { collection: 'users', field: 'email' },
+          }"
+          type="email"
+        />
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <vee-field
-            name="password"
-            v-model="form.password"
-            id="password"
-            type="password"
-            class="form-input"
-          />
-        </div>
+        <app-form-field
+          v-model="form.password"
+          name="password"
+          label="Password"
+          rules="required|min:8"
+          type="password"
+        />
 
         <div class="form-group">
           <label for="avatar">
@@ -81,6 +56,7 @@
             class="form-input"
             accept="image/*"
           />
+          <vee-error-message name="avatar" class="form-error" />
         </div>
 
         <div class="form-actions">
@@ -97,14 +73,7 @@
 </template>
 
 <script>
-import { Form, Field } from "vee-validate";
-
 export default {
-  components: {
-    VeeForm: Form,
-    VeeField: Field,
-  },
-
   data() {
     return {
       avatarPreview: null,

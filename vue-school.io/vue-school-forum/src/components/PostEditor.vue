@@ -1,22 +1,20 @@
 <template>
   <div class="col-full">
-    <form @submit.prevent="save">
-      <div class="form-group">
-        <textarea
-          v-model="postCopy.text"
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          class="form-input"
-        ></textarea>
-      </div>
+    <vee-form @submit="save" :key="formKey">
+      <app-form-field
+        as="textarea"
+        name="text"
+        v-model="postCopy.text"
+        cols="30"
+        rows="10"
+        rules="required"
+      />
       <div class="form-actions">
         <button class="btn-blue" type="submit">
           {{ post.id ? "Update Post" : "Submit post" }}
         </button>
       </div>
-    </form>
+    </vee-form>
   </div>
 </template>
 
@@ -34,18 +32,14 @@ export default {
   data() {
     return {
       postCopy: { ...this.post },
+      formKey: Math.random(),
     };
   },
   methods: {
     save() {
-      // const post = {
-      //   text: this.text,
-      //   threadId: this.threadId,
-      // };
-      // this.$emit("save", post: this.postCopy);
-      // this.text = "";
       this.$emit("save", { post: this.postCopy });
       this.postCopy.text = "";
+      this.formKey = Math.random();
     },
   },
 };
