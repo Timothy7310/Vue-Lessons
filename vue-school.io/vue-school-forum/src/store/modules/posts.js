@@ -69,18 +69,8 @@ export default {
         { root: true }
       );
     },
-    fetchPost: ({ dispatch }, { id }) =>
-      dispatch(
-        "fetchItem",
-        { emoji: "bla", resource: "posts", id },
-        { root: true }
-      ),
-    fetchPosts: ({ dispatch }, { ids }) =>
-      dispatch(
-        "fetchItems",
-        { emoji: "bla", resource: "posts", ids },
-        { root: true }
-      ),
+    fetchPost: makeFetchItemAction({ emoji: "💬", resource: "posts" }),
+    fetchPosts: makeFetchItemsAction({ emoji: "💬", resource: "posts" }),
   },
   mutations: {},
 };
