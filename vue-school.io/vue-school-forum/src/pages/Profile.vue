@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <h1 style="text-align: center">My Profile</h1>
     <div class="flex-grid">
       <div class="col-3 push-top">

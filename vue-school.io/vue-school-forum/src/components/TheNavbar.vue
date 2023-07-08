@@ -28,7 +28,7 @@
             @click.prevent="isDropdownOpen = !isDropdownOpen"
             v-click-outside="() => (isDropdownOpen = false)"
           >
-            <img
+            <app-avatar-img
               class="avatar-small"
               :src="authUser.avatar"
               :alt="`${authUser.name} profile picture`"

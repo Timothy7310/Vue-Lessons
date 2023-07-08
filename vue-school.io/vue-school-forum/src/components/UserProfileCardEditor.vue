@@ -1,13 +1,33 @@
 <template>
   <div class="profile-card">
     <form @submit.prevent="save">
-      <p class="text-center">
-        <img
-          :src="user.avatar"
-          :alt="`${user.name} profile picture`"
-          class="avatar-xlarge img-update"
-        />
+      <p class="text-center avatar-edit">
+        <label style="cursor: pointer">
+          <app-avatar-img
+            :src="activeUser.avatar"
+            :alt="`${user.name} profile picture`"
+            class="avatar-xlarge img-update"
+          />
+          <div class="avatar-upload-overlay">
+            <app-spinner v-if="uploadingImage" color="white" />
+            <fa
+              v-else
+              icon="camera"
+              size="3x"
+              style="color: white; opacity: 8"
+            />
+          </div>
+          <input
+            v-show="false"
+            type="file"
+            id="avatar"
+            accept="image/*"
+            @change="handleAvatarUpload"
+          />
+        </label>
       </p>
+
+      <user-profile-card-editor-random-avatar @hit="randomAvatar" />
 
       <div class="form-group">
         <input
@@ -75,7 +95,9 @@
       </div>
 
       <div class="btn-group space-between">
-        <button class="btn-ghost" type="button" @click="cancel">Cancel</button>
+        <button class="btn-ghost" type="button" @click.prevent="cancel">
+          Cancel
+        </button>
         <button type="submit" class="btn-blue">Save</button>
       </div>
     </form>
@@ -83,9 +105,16 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import UserProfileCardEditorRandomAvatar from "./UserProfileCardEditorRandomAvatar";
+
 export default {
+  components: {
+    UserProfileCardEditorRandomAvatar,
+  },
   data() {
     return {
+      uploadingImage: false,
       activeUser: { ...this.user },
     };
   },
@@ -97,13 +126,40 @@ export default {
   },
 
   methods: {
+    ...mapActions("auth", ["uploadAvatar"]),
+    async handleAvatarUpload(event) {
+      this.uploadingImage = true;
+      const [file] = event.target.files;
+      const uploadedImage = await this.uploadAvatar({ file });
+      this.activeUser.avatar = uploadedImage || this.activeUser.avatar;
+      this.uploadingImage = false;
+    },
     async save() {
+      await this.handleRandomAvatarUpload();
       this.$store.dispatch("users/updateUser", { ...this.activeUser });
       this.$router.push({ name: "Profile" });
     },
 
     cancel() {
       this.$router.push({ name: "Profile" });
+    },
+
+    async handleRandomAvatarUpload() {
+      const isRandomAvatarGenerated = this.activeUser.avatar.startsWith(
+        "https://images.unsplash.com"
+      );
+      if (isRandomAvatarGenerated) {
+        const image = await fetch(this.activeUser.avatar);
+        const blob = await image.blob();
+        this.activeUser.avatar = await this.uploadAvatar({
+          file: blob,
+          filename: "random",
+        });
+      }
+    },
+
+    randomAvatar(url) {
+      this.activeUser.avatar = url;
     },
   },
 };
