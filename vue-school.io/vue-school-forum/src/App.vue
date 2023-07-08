@@ -8,9 +8,11 @@
     />
     <app-spinner v-show="!showPage" />
   </div>
+  <app-notifications />
 </template>
 
 <script>
+import AppNotifications from "@/components/AppNotifications";
 import TheNavbar from "@/components/TheNavbar";
 import { mapActions } from "vuex";
 import NProgress from "nprogress";
@@ -18,6 +20,7 @@ import NProgress from "nprogress";
 export default {
   components: {
     TheNavbar,
+    AppNotifications,
   },
   data() {
     return {

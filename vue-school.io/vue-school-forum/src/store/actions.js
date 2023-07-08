@@ -1,5 +1,6 @@
 import firebase from "@/helpers/firebase";
 import { findById } from "@/helpers";
+
 export default {
   fetchItem(
     { state, commit },
