@@ -140,7 +140,10 @@ export default {
 
     async save() {
       await this.handleRandomAvatarUpload();
-      this.$store.dispatch("users/updateUser", { ...this.activeUser });
+      this.$store.dispatch("users/updateUser", {
+        ...this.activeUser,
+        threads: this.activeUser.threadIds,
+      });
       this.$router.push({ name: "Profile" });
     },
 

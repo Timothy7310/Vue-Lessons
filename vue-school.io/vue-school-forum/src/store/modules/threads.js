@@ -5,7 +5,7 @@ import {
   makeFetchItemAction,
   makeFetchItemsAction,
 } from "@/helpers";
-import firebase from "firebase";
+import firebase from "@/helpers/firebase";
 import { chunk } from "lodash";
 
 export default {
@@ -27,6 +27,9 @@ export default {
             return thread.posts.length - 1;
           },
           get contributorsCount() {
+            if (!thread.contributors) {
+              return 0;
+            }
             return thread.contributors?.length;
           },
         };
@@ -86,7 +89,7 @@ export default {
       );
       await dispatch(
         "posts/createPost",
-        { text, threadId: threadRef.id },
+        { text, threadId: threadRef.id, firstInThread: true },
         { root: true }
       );
       return findById(state.items, threadRef.id);

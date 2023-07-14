@@ -1,11 +1,16 @@
 <template>
   <div class="thread-list">
     <h2 class="list-title">Threads</h2>
-    <thread-item
-      v-for="thread in threads"
-      :thread="thread"
-      :key="thread.id"
-    ></thread-item>
+    <div v-if="threads.length">
+      <thread-item
+        v-for="thread in threads"
+        :thread="thread"
+        :key="thread.id"
+      />
+    </div>
+  </div>
+  <div v-if="!threads.length" style="padding: 10px; text-align: center">
+    <em>No Threads Available</em>
   </div>
 </template>
 

@@ -84,7 +84,6 @@ export default {
     ...mapActions("users", ["fetchUsers"]),
     ...mapActions("posts", ["fetchPosts", "createPost"]),
     handleAddPost(event) {
-      console.log({ ...event.post });
       this.createPost({ ...event.post });
     },
     addPost(eventData) {
