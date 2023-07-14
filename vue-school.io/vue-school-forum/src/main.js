@@ -9,6 +9,7 @@ import ClickOutsideDirective from "@/plugins/ClickOutsideDirective";
 import PageScrollDirective from "@/plugins/PageScrollDirective";
 import VPagination from "@/plugins/Vue3Pagination";
 import VeeValidatePlugin from "@/plugins/VeeValidatePlugin";
+import { createHead } from "@vueuse/head";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -35,4 +36,5 @@ app.use(ClickOutsideDirective);
 app.use(PageScrollDirective);
 app.use(VPagination);
 app.use(VeeValidatePlugin);
+app.use(createHead());
 app.mount("#app");
