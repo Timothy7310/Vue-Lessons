@@ -63,7 +63,6 @@ export default {
   async created() {
     await this.fetchUserPosts;
     this.asyncDataStatus_fetched();
-    console.log(this.user.posts);
   },
 };
 </script>

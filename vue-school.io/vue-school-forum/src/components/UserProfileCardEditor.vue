@@ -1,6 +1,6 @@
 <template>
   <div class="profile-card">
-    <form @submit.prevent="save">
+    <vee-form @submit="save">
       <p class="text-center avatar-edit">
         <label style="cursor: pointer">
           <app-avatar-img
@@ -29,33 +29,27 @@
 
       <user-profile-card-editor-random-avatar @hit="randomAvatar" />
 
-      <div class="form-group">
-        <input
-          v-model="activeUser.username"
-          type="text"
-          placeholder="Username"
-          class="form-input text-lead text-bold"
-        />
-      </div>
+      <app-form-field
+        label="Username"
+        name="username"
+        v-model="activeUser.username"
+        :rules="`required|unique:users,username,${user.username}`"
+      />
 
-      <div class="form-group">
-        <input
-          v-model="activeUser.name"
-          type="text"
-          placeholder="Full Name"
-          class="form-input text-lead"
-        />
-      </div>
+      <app-form-field
+        label="Full Name"
+        name="name"
+        v-model="activeUser.name"
+        rules="required"
+      />
 
-      <div class="form-group">
-        <label for="user_bio">Bio</label>
-        <textarea
-          v-model="activeUser.bio"
-          class="form-input"
-          id="user_bio"
-          placeholder="Write a few words about yourself."
-        ></textarea>
-      </div>
+      <app-form-field
+        as="textarea"
+        label="Bio"
+        name="bio"
+        v-model="activeUser.bio"
+        placeholder="Write a few words about yourself."
+      />
 
       <div class="stats">
         <span>{{ user.postsCount }} posts</span>
@@ -64,35 +58,35 @@
 
       <hr />
 
-      <div class="form-group">
-        <label class="form-label" for="user_website">Website</label>
-        <input
-          v-model="activeUser.website"
-          autocomplete="off"
-          class="form-input"
-          id="user_website"
-        />
-      </div>
+      <app-form-field
+        label="Website"
+        name="website"
+        v-model="activeUser.website"
+        rules="url"
+      />
 
-      <div class="form-group">
-        <label class="form-label" for="user_email">Email</label>
-        <input
-          v-model="activeUser.email"
-          autocomplete="off"
-          class="form-input"
-          id="user_email"
-        />
-      </div>
+      <app-form-field
+        label="Email"
+        name="email"
+        v-model="activeUser.email"
+        :rules="`required|email|unique:users,email,${user.email}`"
+      />
 
-      <div class="form-group">
-        <label class="form-label" for="user_location">Location</label>
-        <input
-          v-model="activeUser.location"
-          autocomplete="off"
-          class="form-input"
-          id="user_location"
+      <app-form-field
+        label="Location"
+        name="location"
+        v-model="activeUser.location"
+        list="locations"
+        @mouseenter="loadLocationOptions"
+      />
+
+      <datalist id="locations">
+        <option
+          v-for="location in locationOptions"
+          :value="location.name.common"
+          :key="location.name.common"
         />
-      </div>
+      </datalist>
 
       <div class="btn-group space-between">
         <button class="btn-ghost" type="button" @click.prevent="cancel">
@@ -100,7 +94,7 @@
         </button>
         <button type="submit" class="btn-blue">Save</button>
       </div>
-    </form>
+    </vee-form>
   </div>
 </template>
 
@@ -116,8 +110,10 @@ export default {
     return {
       uploadingImage: false,
       activeUser: { ...this.user },
+      locationOptions: [],
     };
   },
+
   props: {
     user: {
       type: Object,
@@ -127,6 +123,13 @@ export default {
 
   methods: {
     ...mapActions("auth", ["uploadAvatar"]),
+
+    async loadLocationOptions() {
+      if (this.locationOptions.length) return;
+      const res = await fetch("https://restcountries.com/v3.1/all");
+      this.locationOptions = await res.json();
+    },
+
     async handleAvatarUpload(event) {
       this.uploadingImage = true;
       const [file] = event.target.files;
@@ -134,6 +137,7 @@ export default {
       this.activeUser.avatar = uploadedImage || this.activeUser.avatar;
       this.uploadingImage = false;
     },
+
     async save() {
       await this.handleRandomAvatarUpload();
       this.$store.dispatch("users/updateUser", { ...this.activeUser });
