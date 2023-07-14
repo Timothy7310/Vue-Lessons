@@ -95,22 +95,31 @@
         <button type="submit" class="btn-blue">Save</button>
       </div>
     </vee-form>
+    <user-profile-card-editor-reauthenticate
+      v-model="needsReAuth"
+      @success="onReauthenticated"
+      @fail="onReauthenticatedFailed"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import UserProfileCardEditorRandomAvatar from "./UserProfileCardEditorRandomAvatar";
+import UserProfileCardEditorRandomAvatar from "@/components/UserProfileCardEditorRandomAvatar";
+import UserProfileCardEditorReauthenticate from "@/components/UserProfileCardEditorReauthenticate";
+import useNotifications from "@/composables/useNotifications";
 
 export default {
   components: {
     UserProfileCardEditorRandomAvatar,
+    UserProfileCardEditorReauthenticate,
   },
   data() {
     return {
       uploadingImage: false,
       activeUser: { ...this.user },
       locationOptions: [],
+      needsReAuth: false,
     };
   },
 
@@ -119,6 +128,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  setup() {
+    const { addNotification } = useNotifications();
+    return { addNotification };
   },
 
   methods: {
@@ -138,13 +152,43 @@ export default {
       this.uploadingImage = false;
     },
 
-    async save() {
-      await this.handleRandomAvatarUpload();
-      this.$store.dispatch("users/updateUser", {
+    async onReauthenticated() {
+      await this.$store.dispatch("auth/updateEmail", {
+        email: this.activeUser.email,
+      });
+      this.saveUserData();
+    },
+
+    async onReauthenticatedFailed() {
+      this.addNotification({
+        message: "Error updating user",
+        type: "error",
+        timeout: 3000,
+      });
+      this.$router.push({ name: "Profile" });
+    },
+
+    async saveUserData() {
+      await this.$store.dispatch("users/updateUser", {
         ...this.activeUser,
         threads: this.activeUser.threadIds,
       });
       this.$router.push({ name: "Profile" });
+      this.addNotification({
+        message: "User successfully updated",
+        timeout: 3000,
+      });
+    },
+
+    async save() {
+      await this.handleRandomAvatarUpload();
+      const isEmailChanged = this.activeUser.email !== this.user.email;
+
+      if (isEmailChanged) {
+        this.needsReAuth = true;
+      } else {
+        this.saveUserData();
+      }
     },
 
     cancel() {
